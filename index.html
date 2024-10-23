@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cómo Funciona la Voz IP en WhatsApp</title>
+    <!-- Añadimos la librería canvas-confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        /* CSS */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            overflow: hidden; /* Para que el confeti no genere barras de desplazamiento */
+            margin: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            margin: auto;
+            margin-top: 40px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        h1, h2 {
+            color: #28a745;
+        }
+
+        .slide {
+            display: none;
+            animation: fade 0.5s;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .navigation {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .progress-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Animación al pasar el cursor sobre las imágenes */
+        .slide img {
+            transition: transform 0.3s;
+        }
+
+        .slide img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Diapositiva de Título -->
+    <div class="slide" id="slide-1">
+        <h1>Cómo Funciona la Voz IP en WhatsApp</h1>
+        <img src="images/WhatsApp.gif" alt="Logo de WhatsApp Animado" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <div class="slide" id="slide-2">
+        <h2>Introducción a la Voz IP</h2>
+        <p>La Voz IP permite hacer llamadas a través de Internet enviando datos en forma de paquetes. En esta presentación, usaremos WhatsApp como ejemplo.</p>
+        <img src="images/voip.gif" alt="Icono de Voz IP Animado" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <div class="slide" id="slide-3">
+        <h2>Equipo 1: El Teléfono Móvil</h2>
+        <p>El teléfono móvil se conecta a la red Wi-Fi o de datos móviles. Transforma la voz en datos digitales que luego se envían a través de Internet.</p>
+        <img src="images/telefono.gif" alt="Imagen de un teléfono móvil" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <div class="slide" id="slide-4">
+        <h2>Equipo 2: El Router</h2>
+        <p>El router es responsable de enrutar el tráfico de datos desde el teléfono móvil hacia la red de Internet. Envía los paquetes de datos hacia el destino correcto.</p>
+        <img src="images/router.gif" alt="Imagen de un router" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <div class="slide" id="slide-5">
+        <h2>Equipo 3: Servidores de WhatsApp</h2>
+        <p>Los servidores de WhatsApp reciben los paquetes de datos y los procesan para enviarlos al destinatario correcto. También se encargan de la autenticación y seguridad de las llamadas.</p>
+        <img src="images/servidores.gif" alt="Imagen de servidores" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <div class="slide" id="slide-6">
+        <h2>Equipo 4: El Destinatario</h2>
+        <p>El dispositivo del destinatario recibe los datos a través de la red y los convierte de nuevo en sonido, permitiendo que escuchemos la voz de la persona que llama.</p>
+        <img src="images/destinatario.gif" alt="Imagen de persona usando un teléfono" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <div class="slide" id="slide-7">
+        <h2>Conclusión</h2>
+        <p>Así funciona la Voz IP en WhatsApp: desde tu teléfono, pasando por el router y los servidores, hasta llegar al teléfono de la persona con la que hablas.</p>
+        <img src="images/conclusion.gif" alt="Icono de red de comunicación" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <!-- Diapositiva Final de Agradecimiento -->
+    <div class="slide" id="slide-8">
+        <h2>¡Gracias!</h2>
+        <p>Presentado por <strong>Edwin Moreno</strong></p>
+        <img src="images/thankyou.gif" alt="Gracias" style="width: 200px; margin: 20px 0;">
+    </div>
+
+    <div class="navigation">
+        <button id="prevBtn" onclick="changeSlide(-1)">Anterior</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Siguiente</button>
+    </div>
+    <div class="progress-indicator">
+        <span id="progress-text">1 / 8</span>
+    </div>
+</div>
+
+<script>
+    /* JavaScript */
+    let currentSlide = 1;
+    const totalSlides = document.querySelectorAll('.slide').length;
+
+    showSlide(currentSlide);
+
+    function showSlide(n) {
+        const slides = document.querySelectorAll('.slide');
+        if (n > slides.length) {
+            currentSlide = slides.length;
+        }
+        if (n < 1) {
+            currentSlide = 1;
+        }
+        slides.forEach((slide) => {
+            slide.classList.remove('active');
+        });
+        slides[currentSlide - 1].classList.add('active');
+        updateProgress();
+        updateButtons();
+
+        // Mostrar confeti en la última diapositiva
+        if (currentSlide === totalSlides) {
+            startConfetti();
+        } else {
+            stopConfetti();
+        }
+    }
+
+    function changeSlide(n) {
+        showSlide(currentSlide += n);
+    }
+
+    function updateProgress() {
+        const progressText = document.getElementById('progress-text');
+        progressText.textContent = `${currentSlide} / ${totalSlides}`;
+    }
+
+    function updateButtons() {
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        if (currentSlide === 1) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'inline-block';
+        }
+        if (currentSlide === totalSlides) {
+            nextBtn.textContent = 'Reiniciar';
+            nextBtn.onclick = function() {
+                currentSlide = 1;
+                showSlide(currentSlide);
+            }
+        } else {
+            nextBtn.textContent = 'Siguiente';
+            nextBtn.onclick = function() {
+                changeSlide(1);
+            }
+        }
+    }
+
+    /* Código para el confeti usando canvas-confetti */
+    function startConfetti() {
+        var duration = 5 * 1000; // Duración del confeti en milisegundos
+        var end = Date.now() + duration;
+
+        (function frame() {
+            // Lanzar confeti desde la izquierda
+            confetti({
+                particleCount: 3,
+                angle: 60,
+                spread: 55,
+                origin: { x: 0 }
+            });
+            // Lanzar confeti desde la derecha
+            confetti({
+                particleCount: 3,
+                angle: 120,
+                spread: 55,
+                origin: { x: 1 }
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        }());
+    }
+
+    function stopConfetti() {
+        // La librería canvas-confetti se encarga de limpiar automáticamente
+    }
+</script>
+
+</body>
+</html>
